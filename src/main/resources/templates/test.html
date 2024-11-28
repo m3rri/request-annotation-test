@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plate excel upload</title>
+</head>
+<style>
+    .wrap {
+        border: 1px solid #aaa;
+        margin: 1rem;
+        padding: 1rem;
+    }
+    .error {
+        color: red;
+    }
+    .result {
+        color: black;
+    }
+</style>
+<body>
+====== Plate Upload API Form ======
+<form>
+    <div>
+        <label for="name">name</label>
+        <input type="text" id="name" name="name" value="Name"/>
+    </div>
+    <div>
+        <label for="desc">desc</label>
+        <input type="text" id="desc" name="desc" value="Description"/>
+    </div>
+
+    <div>
+        <label for="file">file</label>
+        <input type="file" id="file" name="file" />
+    </div>
+    <div>
+        <label for="file2">file2</label>
+        <input type="file" id="file2" name="file2" />
+    </div>
+</form>
+============================
+<br>
+<div class="wrap">
+    <div>
+        <button style="height:25px" onclick="submitRequestParamSingle();">submitRequestParamSingle</button>
+        <pre id="request-param-single"></pre>
+    </div>
+    <div>
+        <button style="height:25px" onclick="submitRequestParamWithOtherParams();">submitRequestParamWithOtherParams</button>
+        <pre id="request-param-with-other-params"></pre>
+    </div>
+    <div>
+        <button style="height:25px" onclick="submitRequestParamMultiWithOtherParams();">submitRequestParamMultiWithOtherParams</button>
+        <pre id="request-param-multi-with-other-params"></pre>
+    </div>
+    <div>
+        <button style="height:25px" onclick="submitRequestParamWithRequestBody();">submitRequestParamWithRequestBody</button>
+        <pre id="request-param-with-request-body"></pre>
+    </div>
+</div>
+<div class="wrap">
+    <div>
+        <button style="height:25px" onclick="submitRequestPartSingle();">submitRequestPartSingle</button>
+        <pre id="request-part-single"></pre>
+    </div>
+    <div>
+        <button style="height:25px" onclick="submitRequestPartWithRequestParam();">submitRequestPartWithRequestParam</button>
+        <pre id="request-part-with-request-param"></pre>
+    </div>
+    <div>
+        <button style="height:25px" onclick="submitRequestPartWithRequestBody();">submitRequestPartWithRequestBody</button>
+        <pre id="request-part-with-request-body"></pre>
+    </div>
+    <div>
+        <button style="height:25px" onclick="submitRequestPartWithRequestPart();">submitRequestPartWithRequestPart</button>
+        <pre id="request-part-with-request-part"></pre>
+    </div>
+    <div>
+        <button style="height:25px" onclick="submitRequestPartInTheRequestBody();">submitRequestPartInTheRequestBody</button>
+        <pre id="request-part-in-the-request-body"></pre>
+    </div>
+</div>
+<div class="wrap">
+    <div>
+        <button style="height:25px" onclick="submitModelAttributeSingle();">submitModelAttributeSingle</button>
+        <pre id="model-attribute-single"></pre>
+    </div>
+    <div>
+        <button style="height:25px" onclick="submitModelAttributeWithRequestBody();">submitModelAttributeWithRequestBody</button>
+        <pre id="model-attribute-with-request-body"></pre>
+    </div>
+    <div>
+        <button style="height:25px" onclick="submitModelAttributeInTheRequestBody();">submitModelAttributeInTheRequestBody</button>
+        <pre id="model-attribute-in-the-request-body"></pre>
+    </div>
+</div>
+
+<script type="text/javascript">
+    async function submitRequestParamSingle () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+
+        await post(bodyData, 'request-param/single', "request-param-single");
+    }
+
+    async function submitRequestParamWithOtherParams () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+        bodyData.append("name", document.querySelector("#name").value);
+
+        await post(bodyData, 'request-param/with-other-params', "request-param-with-other-params");
+    }
+
+    async function submitRequestParamMultiWithOtherParams () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        const file2 = document.querySelector("#file2").files;
+        bodyData.append("file1", file[0]);
+        bodyData.append("file2", file2[0]);
+        bodyData.append("name", document.querySelector("#name").value);
+        bodyData.append("desc", document.querySelector("#desc").value);
+
+        await post(bodyData, 'request-param/multi-with-other-params', "request-param-multi-with-other-params");
+    }
+
+    async function submitRequestParamWithRequestBody () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+        bodyData.append("requestBody", `{"name": "${document.querySelector("#name").value}", "desc": "${document.querySelector("#desc").value}"}`);
+
+        await post(bodyData, 'request-param/with-request-body', "request-param-with-request-body");
+    }
+
+    async function submitRequestPartSingle () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+
+        await post(bodyData, 'request-part/single', "request-part-single");
+    }
+
+    async function submitRequestPartWithRequestParam () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+        bodyData.append("name", document.querySelector("#name").value);
+
+        await post(bodyData, 'request-part/with-request-param', "request-part-with-request-param");
+    }
+
+    async function submitRequestPartWithRequestBody () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+        bodyData.append("requestBody", `{"name": "${document.querySelector("#name").value}", "desc": "${document.querySelector("#desc").value}"}`);
+
+        await post(bodyData, 'request-part/with-request-body', "request-part-with-request-body");
+    }
+
+    async function submitRequestPartWithRequestPart () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+        bodyData.append(
+            "requestBody",
+            new Blob([`{"name": "${document.querySelector("#name").value}", "desc": "${document.querySelector("#desc").value}"}`], {type: "application/json"})
+        );
+
+        await post(bodyData, 'request-part/with-request-part', "request-part-with-request-part");
+    }
+
+    async function submitRequestPartInTheRequestBody () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+        bodyData.append("name", document.querySelector("#name").value);
+        bodyData.append("desc", document.querySelector("#desc").value);
+
+        await post(bodyData, 'request-part/in-the-request-body', "request-part-in-the-request-body");
+    }
+
+    async function submitModelAttributeSingle () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+
+        await post(bodyData, 'model-attribute/single', "model-attribute-single");
+    }
+
+    async function submitModelAttributeWithRequestBody () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+        bodyData.append(
+            "requestBody",
+            new Blob([`{"name": "${document.querySelector("#name").value}", "desc": "${document.querySelector("#desc").value}"}`], {type: "application/json"})
+        );
+
+        await post(bodyData, 'model-attribute/with-request-body', "model-attribute-with-request-body");
+    }
+
+    async function submitModelAttributeInTheRequestBody () {
+        const bodyData = new FormData();
+        const file = document.querySelector("#file").files;
+        bodyData.append("file", file[0]);
+        bodyData.append("name", document.querySelector("#name").value);
+        bodyData.append("desc", document.querySelector("#desc").value);
+
+        await post(bodyData, 'model-attribute/in-the-request-body', "model-attribute-in-the-request-body");
+    }
+
+    async function post(bodyData, uri, preId){
+        const context = '[[@{/}]]';
+        await fetch(context + uri, {
+            method: 'POST',
+            body: bodyData
+        }).then(res=>{
+            if(res.ok){
+                return res.text();
+            }else{
+                return res.json();
+            }
+        })
+        .then(res=>{
+            if(typeof res == 'object'){
+                document.querySelector(`#${preId}`).innerHTML = res.error;
+                document.querySelector(`#${preId}`).className = "error";
+            }else{
+                document.querySelector(`#${preId}`).innerHTML = res;
+                document.querySelector(`#${preId}`).className = "result";
+            }
+        });
+    }
+</script>
+</body>
+</html>
